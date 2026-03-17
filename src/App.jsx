@@ -4,13 +4,11 @@ import Img from "./assets/no-projects.png";
 import Project from "./components/Project";
 import Input from "./components/Input.jsx";
 
-let projects = [];
-
 function App() {
   const [showInput, setShowInput] = useState(false)
   const [showProject, setShowProject] = useState(false);
   const [chosedProject, setChosedProject] = useState(false);
-  //const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const name = useRef('');
   const description = useRef('');
   const date = useRef('');
@@ -26,10 +24,19 @@ function App() {
   }
 
   const addProject = () => {
-      name.current.value !== '' && projects.push({ title: name.current.value ,
+      const newProject = {
+        id: Date.now(),
+        title: name.current.value ,
+        description: description.current.value,
+        date: date.current.value,
+        tasks: []
+      }
+      setProjects((prev) => [...prev, newProject])
+      /*name.current.value !== '' && projects.push({ title: name.current.value ,
                                                    description: description.current.value,
-                                                   date: date.current.value
-                                                }); 
+                                                   date: date.current.value,
+                                                   tasks: []
+                                                }); */
       setShowInput(false)
   }
 
@@ -48,7 +55,7 @@ function App() {
   }*/
 
   const deleteProject = (project) => {
-    delete projects[projects.indexOf(project)]
+    setProjects(prev => prev.filter((element, index) => index !== projects.indexOf(project)))
     setShowProject(false);
   }
 
@@ -56,6 +63,17 @@ function App() {
     console.log("bin in deleteTask")
     console.log(task)
     setTasks(prev => prev.filter(element => element !== task))
+  }*/
+
+  const addTask = (currentProject) => {
+    console.log(currentProject);
+    console.log(task.current.value)
+    setProjects(prev => prev.map(p => p === currentProject ? { ...p, tasks: [...p.tasks, task.current.value]} : p))
+    console.log(currentProject);
+  }
+
+  /*const deleteTask = (project) => {
+    setProjects(prev => prev.filter(p => p.id))
   }*/
 
   //console.log(projects)
@@ -68,7 +86,7 @@ function App() {
       </ul>
         <section className="my-8 text-center">
           { showInput ? <Input name={name} description={description} date={date} add={addProject} cancel={cancel}/> :
-            showProject ? <Project project={chosedProject} task={task} deleteProject={deleteProject} /> :
+            showProject ? <Project project={chosedProject} task={task} deleteProject={deleteProject} addTask={addTask} /> :
             <>
             <img src={Img} className="w-16 h-16 object-contain mx-auto" />
             <h1 className=" text-5xl font-bold">No Project are Selected</h1>
