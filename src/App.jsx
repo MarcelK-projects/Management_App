@@ -13,6 +13,7 @@ function App() {
   const description = useRef('');
   const date = useRef('');
   const task = useRef('');
+  //const currentProject = '';
   
   const handleShowInput = () => {
     setShowInput(true);
@@ -65,16 +66,39 @@ function App() {
     setTasks(prev => prev.filter(element => element !== task))
   }*/
 
-  const addTask = (currentProject) => {
-    console.log(currentProject);
-    console.log(task.current.value)
-    setProjects(prev => prev.map(p => p === currentProject ? { ...p, tasks: [...p.tasks, task.current.value]} : p))
-    console.log(currentProject);
+  const addTask = (item) => {
+    if(task.current.value !== "") {
+    setProjects(prev => {
+      const updatedProjects = prev.map(p => 
+        p.id === item.id ? { ...p, tasks: [...p.tasks, task.current.value] } : p
+      );
+
+      const updatedProject = updatedProjects.find(p => p.id === item.id);
+
+      setChosedProject(updatedProject);
+
+      return updatedProjects;
+    });
+  }
   }
 
-  /*const deleteTask = (project) => {
-    setProjects(prev => prev.filter(p => p.id))
-  }*/
+  const deleteTask = (project, taskIndex) => {
+    console.log("bin in deleteTask:")
+    //console.log(index);
+    setProjects(prev => {
+      const updatedProjects = prev.map(p => p.id === project.id ?
+      {
+        ...p, 
+        tasks: p.tasks.filter((_, index) => index !== taskIndex)
+      }
+      :p
+    )
+    const updatedProject = updatedProjects.find(p => p.id === project.id);
+    setChosedProject(updatedProject);
+    return updatedProjects;
+    });
+    
+  }
 
   //console.log(projects)
   return (
@@ -86,7 +110,7 @@ function App() {
       </ul>
         <section className="my-8 text-center">
           { showInput ? <Input name={name} description={description} date={date} add={addProject} cancel={cancel}/> :
-            showProject ? <Project project={chosedProject} task={task} deleteProject={deleteProject} addTask={addTask} /> :
+            showProject ? <Project project={chosedProject} task={task} deleteProject={deleteProject} addTask={addTask}  deleteTask={deleteTask} /> :
             <>
             <img src={Img} className="w-16 h-16 object-contain mx-auto" />
             <h1 className=" text-5xl font-bold">No Project are Selected</h1>

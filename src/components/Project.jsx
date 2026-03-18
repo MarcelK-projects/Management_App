@@ -1,10 +1,10 @@
 //let tasks = [];
 import { useState, useRef } from 'react'
 
-export default function Project({ project, task, deleteProject, addTask }) {
+export default function Project({ project, task, deleteProject, addTask, deleteTask }) {
     //const allTasks = useRef([]);
     //const [tasks, setTasks] = useState([]);
-    console.log("bin in Project: " + project.tasks)
+    console.log("bin in Project: " + project.tasks[0])
     
     /*const addTask = () => {
       console.log(project.tasks)
@@ -14,12 +14,12 @@ export default function Project({ project, task, deleteProject, addTask }) {
       //allTasks.current = tasks 
     }*/
 
-    const deleteTask = (delTask) => {
+    /*const deleteTask = (delTask) => {
       console.log("bin in deleteTask")
       console.log(delTask)
       setTasks(prev => prev.filter((element, index) => index !== delTask))
       //allTasks.current = task
-    }
+    }*/
 
 
     return(
@@ -34,7 +34,7 @@ export default function Project({ project, task, deleteProject, addTask }) {
             {project.tasks.map((item, index) => 
             <>
               <li key={index}>{item}
-                <button onClick={() => deleteTask(index)}>clear</button>
+                <button onClick={() => deleteTask(project, index)}>clear</button>
               </li>
               
             </>)}
